@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { FavoriteButton } from './FavoriteButton';
 import type { Match, MatchStatus } from '../types/matches';
 
 type Props = {
   match: Match;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 };
 
 const STATUS_LABELS: Record<MatchStatus, string> = {
@@ -29,7 +32,7 @@ function formatStartDate(startsAt: string | null) {
   return Number.isNaN(date.getTime()) ? 'Дата уточняется' : dateFormatter.format(date);
 }
 
-export function MatchCard({ match }: Props) {
+export function MatchCard({ match, isFavorite, onToggleFavorite }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.mainRow}>
@@ -43,6 +46,10 @@ export function MatchCard({ match }: Props) {
             {match.score.home} : {match.score.away}
           </Text>
         )}
+
+        <View style={styles.favorite}>
+          <FavoriteButton active={isFavorite} onPress={onToggleFavorite} />
+        </View>
       </View>
 
       <View style={styles.detailsRow}>
@@ -81,6 +88,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'right',
     color: '#111827',
+  },
+  favorite: {
+    marginLeft: 12,
   },
   detailsRow: {
     flexDirection: 'row',
